@@ -1,6 +1,5 @@
-export const Card = [
   // создание карточки
-  function creteCard(data, onDelete, onLike, onCard) {
+export  function createCard(data, onDelete, onLike, onCard) {
 
         const cardTemplate = document.querySelector('#card-template').content;
         const cardElement = cardTemplate.querySelector('.card').cloneNode(true);
@@ -13,25 +12,17 @@ export const Card = [
         cardElement.querySelector('.card__title').textContent  = data.name;
             
         return cardElement;    
-    },
+    };
 
-    function cardLike (evt) {
+export function cardLike (evt) {
         evt.target.classList.toggle('card__like-button_is-active');
-    },
+    };
 
-    function cardDelete(evt) {
+export function cardDelete(evt) {
         evt.target.closest(".card").remove();
-    },
-
-    function cardOpen (evt) {    
-        popupImage.querySelector('.popup__image').src = evt.target.src;    
-        openModal(popupImage);
-    },
+    };
 
 
-    initialCards.forEach(element => {
-        const card = creteCard(element, cardDelete, cardLike, cardOpen);
-        cardList.append(card);
-    })
 
-];
+
+

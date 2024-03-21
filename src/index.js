@@ -1,8 +1,7 @@
 import './pages/index.css'; //  импорт главного файла стилей
 import {initialCards} from './cards';
-import {Card} from './components/card.js';
-import {Modal} from './components/modal.js';
-
+import {createCard, cardLike, cardDelete} from './components/card';
+import {openModal, closeModal,  closePopupEsc, closePopupByOverlay} from './components/modal';
 
 const cardList = document.querySelector('.places__list');
 const popups = document.querySelectorAll('.popup');
@@ -12,6 +11,34 @@ const popups = document.querySelectorAll('.popup');
 const popupProfileClose = document.querySelector('.popup_type_edit .popup__close');
 const popupNewCardClose = document.querySelector('.popup_type_new-card .popup__close');
 const popupImageClose = document.querySelector('.popup_type_image .popup__close');
+
+
+
+ // Закрытие карточки по клику о человеке
+ popupProfileClose.addEventListener('click', function() {
+    closeModal(popupProfileEdit)
+});
+
+// Закрытие  карточки по клику о месте
+popupNewCardClose.addEventListener('click', function() {
+    closeModal(popupImageAdd)
+});  
+
+// Закрытие  карточки по клику о картинке
+popupImageClose.addEventListener('click', function() {
+    closeModal(popupImage)
+});
+
+function cardOpen (evt) {    
+    popupImage.querySelector('.popup__image').src = evt.target.src; 
+    popupImage.querySelector('.popup__image').alt = 'Альтернативный текст';   
+    openModal(popupImage);
+};
+
+
+popups.forEach((popup) => { 
+    popup.addEventListener('click',  closePopupByOverlay)});
+    
 
 /* прописываем каждый из попапов */
 /* для увеличения картинки */
@@ -33,7 +60,7 @@ function createNewCard (evt) {
                 name: evt.target['place-name'].value,
                 link: evt.target['link'].value
             };
-    cardList.prepend(creteCard(item, cardDelete, cardLike, cardOpen));
+    cardList.prepend(createCard(item, cardDelete, cardLike, cardOpen));
     evt.target.reset(); 
     closeModal(popupImageAdd);
 }
@@ -72,9 +99,6 @@ const setProfile = (name, description) => {
 
 formElementEditProfile.addEventListener('submit', editProfile);
 
-
-
-
 const profileName = document.querySelector('.profile__title');
 const profileDescription = document.querySelector('.profile__description');
 
@@ -85,7 +109,10 @@ popupProfileEditButtonOpen.addEventListener('click', () =>{
     jobInput.value = profileDescription.textContent;         
     
      openModal(popupProfileEdit)
- })
+});
 
 
-
+ initialCards.forEach(element => {
+    const card = createCard(element, cardDelete, cardLike, cardOpen);
+    cardList.append(card);
+});
