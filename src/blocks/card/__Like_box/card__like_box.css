@@ -1,0 +1,15 @@
+.card__like_box {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;    
+  }
+  
+.card__like-number {
+    max-width: 10px;
+    min-height: 13px;    
+    line-height: 16px;
+    letter-spacing: 0em;
+    text-align: center;
+    align-self: center;font-size: 13px;
+    
+  }
