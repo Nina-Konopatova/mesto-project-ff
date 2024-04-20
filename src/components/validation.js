@@ -1,14 +1,3 @@
-export const validationConfigurate = {
-  formSelector: ".popup__form",
-  inputSelector: ".popup__input",
-  submitButtonSelector: ".popup__button",
-  inactiveButtonClass: "popup__button_disabled",
-  inputErrorClass: "form__input_type_error",
-  errorClass: "form__input-error_active",   
-  };
-
-  
-
 // Добавление сообщения
 export const showInputError = (formElement, inputElement, validationConfigurate) => {
     const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
@@ -19,11 +8,11 @@ export const showInputError = (formElement, inputElement, validationConfigurate)
   // Удаление  сообщения
  export const hideInputError = (formElement, inputElement, validationConfigurate) => {
     const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
-    // if (errorElement) {
+    if (errorElement) {
       inputElement.classList.remove(validationConfigurate.inputErrorClass);
       errorElement.classList.remove(validationConfigurate.errorClass);
       errorElement.textContent = "";
-    // }
+    }
   };
   
   // Проверка на валидность
@@ -78,6 +67,7 @@ export  function clearValidation(formElement, validationConfigurate) {
   
     inputList.forEach((inputElement) =>
       hideInputError(formElement, inputElement, validationConfigurate));
+      formElement.reset();
     toggleButtonState(inputList, validationConfigurate, buttonElementReturn);
   }
 
@@ -92,4 +82,3 @@ export  function clearValidation(formElement, validationConfigurate) {
     }
   };
 
-// export { enableValidation, clearValidation };
