@@ -6,7 +6,7 @@ const cardTemplate = document.querySelector("#card-template").content;
 
 // создание карточки
 
-export function createCard (cards, onDelete, onLike, onCard, userId) {
+export function createCard(card, onDelete, onLike, onCard, userId) {
 
         const cardElement = cardTemplate.querySelector('.card').cloneNode(true);       
  
@@ -17,31 +17,30 @@ export function createCard (cards, onDelete, onLike, onCard, userId) {
         const buttonLike = cardElement.querySelector(".card__like-button");
         const cardLikeNumber = cardElement.querySelector(".card__like-number");
         
-        cardImage.src = cards.link;
-        cardImage.alt = cards.name;
-        cardTitle.textContent = cards.name;
-        cardLikeNumber.textContent = cards.likes.length;
+        cardImage.src = card.link;
+        cardImage.alt = card.name;
+        cardTitle.textContent = card.name;
+        cardLikeNumber.textContent = card.likes.length;
 
         // Скрытие кнопки удаления карточки если пользователь не является владельцем
 
-        if (userId !== cards.owner._id) {
+        if (userId !== card.owner._id) {
             cardDeleteButton.style.display = "none";
         } else {
             cardDeleteButton.style.display = "block";
+            cardDeleteButton.addEventListener("click", () =>
+            onDelete(cardElement, card._id)
+          );
         }
 
           // Проверка наличия лайка пользователя в массиве likes
 
-        const myLike = cards.likes.some((like) => like._id === userId);
+        const myLike = card.likes.some((like) => like._id === userId);
         if (myLike) {
             buttonLike.classList.add("card__like-button_is-active");
         }
-
-        cardDeleteButton.addEventListener("click", () =>
-            onDelete(cardElement, cards._id)
-        );
         buttonLike.addEventListener("click", () =>
-            onLike(buttonLike, cardLikeNumber, cards._id)
+            onLike(buttonLike, cardLikeNumber, card._id)
         );
         cardImage.addEventListener("click", onCard);
 
@@ -62,25 +61,14 @@ export function onDelete(cardElement, cardId) {
   
   // Функция подсчета лайков
 export function onLike(buttonLike, cardLikeNumber, id) {
-    if (buttonLike.classList.contains("card__like-button_is-active")) {
-      deleteLikeCard(id)
+    const likeMethod = buttonLike.classList.contains("card__like-button_is-active") ? 
+    deleteLikeCard : addLikeCard;
+    likeMethod(id) 
         .then((res) => {
-          buttonLike.classList.toggle("card__like-button_is-active");
-          cardLikeNumber.textContent = res.likes.length;
+           buttonLike.classList.toggle("card__like-button_is-active"); 
+           cardLikeNumber.textContent = res.likes.length;
         })
-        .catch((err) => {
-          console.log("Произошла ошибка отправки запроса:", err);
-        });
-    } else {
-      addLikeCard(id)
-        .then((res) => {
-          buttonLike.classList.toggle("card__like-button_is-active");
-          cardLikeNumber.textContent = res.likes.length;
-        })
-        .catch((err) => {
-          console.log("Произошла ошибка отправки запроса:", err);
-        });
-    }
+    .catch(err => console.log(err));
   }
   
 

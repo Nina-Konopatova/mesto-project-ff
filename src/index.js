@@ -37,9 +37,9 @@ function showUserInfo(userData) {
 
 // Вывод карточeк на страницу
 
-function showCards(cards, onDelete, onLike, onCard, userId) {
+function showCard(card, onDelete, onLike, onCard, userId) {
   const cardElement = createCard(
-    cards,
+    card,
     onDelete,
     onLike,
     onCard,
@@ -55,7 +55,7 @@ Promise.all([getUserInfo(), getInitialCards()])
   .then(([user, cards]) => {
     showUserInfo(user);
     cards.forEach((card) => {
-      showCards(cards, onDelete, onLike, onCard, userId);
+      showCard(card, onDelete, onLike, onCard, userId);
     });
   })
   .catch((err) => {
@@ -102,6 +102,7 @@ function handleEditProfileFormSubmit(evt) {
     .finally(() => {
       formElement.querySelector(".popup__button").textContent = "Сохранить";
     });
+    closeModal(popupEditProfile)
 }
 
 //слушатель клика по кнопке сохранения формы редактирования профиля
@@ -126,7 +127,7 @@ const popupAddCardLinkInput = popupAddCardForm.elements["link"];
 // Открытие попапа добавления карточки
 
 popupImageAddButton.addEventListener("click", () => {  
-  clearValidation(popupAddCardForm, validationConfigurate);
+  // clearValidation(popupAddCardForm, validationConfigurate);
   openModal(popupAddCard);
 });
 
